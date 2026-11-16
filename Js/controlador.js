@@ -453,8 +453,7 @@
         configurarValidacionEnEspanol(formularioContacto);
     }
 
-    // ---------- Ubicación del negocio (eventos y flujo) ----------
-    // Pide los datos al servicio, los transforma con el modelo y le dice a la vista qué dibujar.
+    // Eventos del mapa.
     function iniciarUbicacion() {
         const formulario = document.getElementById('form-ubicacion');
         if (!formulario) {
@@ -466,12 +465,10 @@
         const listaUbicaciones = document.getElementById('lista-ubicaciones');
         const botonVerNegocio = document.getElementById('boton-ver-negocio');
 
-        // Muestra un lugar en el mapa.
         function mostrarLugar(lugar) {
             app.Vista.dibujarMapa(modelo.crearUrlMapa(lugar), modelo.crearUrlMapaGrande(lugar));
         }
 
-        // Busca la dirección del negocio al abrir la página y muestra su mapa.
         async function cargarUbicacionNegocio() {
             mostrarLugar(modelo.estado.negocio);
             app.Vista.mostrarEstadoUbicacion('Cargando la ubicación del negocio...', true);
@@ -484,7 +481,6 @@
                     if (lugares.length > 0) {
                         modelo.estado.negocio = lugares[0];
                         mostrarLugar(lugares[0]);
-                        // Si no se halló el número exacto, se avisa que el mapa muestra solo la zona.
                         app.Vista.mostrarEstadoUbicacion(indice === 0
                             ? 'Así llegas a nuestro local.'
                             : 'No encontramos el número exacto; el mapa muestra la zona del local.');
@@ -500,7 +496,6 @@
             }
         }
 
-        // Busca un lugar escrito por la persona (solo al enviar el formulario, no mientras escribe).
         async function buscarDireccion(evento) {
             evento.preventDefault();
 
@@ -531,7 +526,6 @@
             }
         }
 
-        // Delegación de eventos: un solo listener en la lista atiende el clic de cada lugar.
         function seleccionarUbicacion(evento) {
             const boton = evento.target.closest('button.ubicacion__opcion');
             if (!boton) {
@@ -547,7 +541,6 @@
             app.Vista.mostrarEstadoUbicacion(`Mostrando: ${lugar.nombre}`);
         }
 
-        // Vuelve a mostrar el mapa del local.
         function verUbicacionNegocio() {
             if (!modelo.estado.negocio) {
                 app.Vista.mostrarEstadoUbicacion('Todavía no tenemos la ubicación del local en el mapa.');

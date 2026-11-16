@@ -74,20 +74,18 @@
         }
         return null;
     }
-// ---------- Ubicación del negocio (datos y reglas, sin tocar el DOM) ----------
+// Ubicación del negocio.
     const direccionNegocio = 'Carrera 69 #98-95, Medellín';
 
-    // Consultas de la más exacta a la más general; se usa la primera que devuelva resultados.
+    // De la dirección más específica a la más general.
     const consultasNegocio = [
         'Carrera 69 #98-95, Medellín, Colombia',
         'Carrera 69, Medellín, Colombia',
         'Medellín, Colombia'
     ];
 
-    // La API pública permite máximo 1 petición por segundo.
     const pausaEntrePeticiones = 1100;
 
-    // Guarda el local encontrado y los resultados de la última búsqueda.
     const estadoUbicacion = {
         negocio: {
             id: 0,
@@ -100,12 +98,11 @@
         resultados: []
     };
 
-    // Espera un tiempo antes de continuar (se usa entre peticiones a la API).
     function pausar(milisegundos) {
         return new Promise((resolver) => setTimeout(resolver, milisegundos));
     }
 
-    // Distancia en kilómetros entre dos puntos (fórmula de Haversine).
+    // Distancia entre dos coordenadas, en kilómetros.
     function calcularDistanciaKm(origen, destino) {
         const radioTierraKm = 6371;
         const aRadianes = (grados) => (grados * Math.PI) / 180;
@@ -116,7 +113,7 @@
         return radioTierraKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // Convierte la respuesta de la API en objetos simples; con "origen" calcula la distancia al local.
+    // Normaliza los resultados y calcula la distancia si hay un origen.
     function transformarUbicaciones(datos, origen = null) {
         return datos
             .filter((lugar) => lugar.lat && lugar.lon)
@@ -135,7 +132,6 @@
             .sort((a, b) => (origen ? a.distanciaKm - b.distanciaKm : b.importancia - a.importancia));
     }
 
-    // Arma el enlace del mapa incrustado de OpenStreetMap con un marcador en el punto.
     function crearUrlMapa(ubicacion) {
         const margen = 0.004;
         const caja = [
@@ -147,7 +143,6 @@
         return `https://www.openstreetmap.org/export/embed.html?bbox=${caja}&layer=mapnik&marker=${ubicacion.latitud},${ubicacion.longitud}`;
     }
 
-    // Enlace para abrir el mismo punto en la página de OpenStreetMap.
     function crearUrlMapaGrande(ubicacion) {
         return `https://www.openstreetmap.org/?mlat=${ubicacion.latitud}&mlon=${ubicacion.longitud}#map=17/${ubicacion.latitud}/${ubicacion.longitud}`;
     }

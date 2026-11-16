@@ -316,21 +316,18 @@
         document.getElementById('error-producto').textContent = '';
         formulario.querySelectorAll('.campo-error').forEach((campo) => campo.classList.remove('campo-error'));
     }
-// ---------- Ubicación del negocio (solo dibuja, no guarda datos) ----------
+// Renderizado del mapa.
 
-    // Muestra un mensaje; con "cargando" activa el indicador de carga (clase con classList).
     function mostrarEstadoUbicacion(texto, cargando = false) {
         const estado = document.getElementById('estado-ubicacion');
         estado.textContent = texto;
         estado.classList.toggle('ubicacion__estado--cargando', cargando);
     }
 
-    // Habilita o deshabilita el botón de buscar mientras llega la respuesta.
     function habilitarBusquedaUbicacion(habilitada) {
         document.getElementById('boton-buscar-ubicacion').disabled = !habilitada;
     }
 
-    // Muestra el mapa y actualiza el enlace para verlo en grande.
     function dibujarMapa(urlMapa, urlMapaGrande) {
         const enlace = document.getElementById('enlace-mapa');
         document.getElementById('mapa-ubicacion').src = urlMapa;
@@ -338,7 +335,6 @@
         enlace.hidden = false;
     }
 
-    // Dibuja la lista de lugares encontrados (cada uno es un botón con su data-id).
     function dibujarUbicaciones(lista) {
         const contenedor = document.getElementById('lista-ubicaciones');
         contenedor.replaceChildren();

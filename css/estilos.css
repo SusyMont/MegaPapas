@@ -656,22 +656,16 @@ p {
     font-weight: 400;
 }
 
-/* ==========================================================
-   CLASES QUE ACTIVA JAVASCRIPT (estados visuales con classList)
-   ========================================================== */
-
-/* Tarjeta que coincide con la búsqueda o la categoría activa. */
+/* Estados visuales activados por JavaScript. */
 .box.coincide-filtro {
     outline: 2px solid #ff9000;
 }
 
-/* Botón de categoría seleccionado. */
 .boton-filtro.filtro-seleccionado {
     background: #ff9000;
     color: #ffffff;
 }
 
-/* Producto agotado: se ve apagado y no se puede agregar al carrito. */
 .box.agotado {
     opacity: 0.5;
 }
@@ -681,18 +675,15 @@ p {
     background-color: #999999;
 }
 
-/* Fila agotada en la tabla resumen. */
 .tabla-datos tr.fila-agotada td {
     color: #999999;
     background-color: #f5f5f5;
 }
 
-/* Campo del formulario con error. */
 .formulario-pedido .campo-error {
     border: 2px solid #b3261e;
 }
 
-/* Acciones administrativas de cada tarjeta. */
 .editar-producto,
 .eliminar-producto {
     display: block;
@@ -839,7 +830,7 @@ p {
         text-align: center;
     }
 
-    /* La barra lateral queda arriba del contenido porque va primero en el HTML. */
+    /* En móvil, los filtros aparecen antes del catálogo. */
     .products {
         display: block;
         padding: 30px;
@@ -924,7 +915,7 @@ p {
     }
 }
 
-/* Ubicación del negocio (API de OpenStreetMap) */
+/* Mapa */
 .ubicacion { padding: 40px 20px; }
 .ubicacion__formulario { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 20px 0; }
 .ubicacion__campo { flex: 1 1 280px; }
