@@ -401,6 +401,7 @@
         const mensajeContacto = document.getElementById('mensaje-contacto');
         const campoEmailContacto = document.getElementById('correo-contacto');
         const campoConsentimientoPromocionesContacto = document.getElementById('consentimiento-promociones-contacto');
+        const botonContacto = formularioContacto.querySelector('button[type="submit"]');
         formularioContacto.addEventListener('submit', async (evento) => {
             evento.preventDefault();
             const nombre = document.getElementById('nombre-contacto').value.trim();
@@ -410,8 +411,15 @@
             }
 
             if (campoConsentimientoPromocionesContacto.checked) {
+                botonContacto.disabled = true;
+                mensajeContacto.classList.remove('error');
+                mensajeContacto.textContent = 'Registrando tu correo...';
                 try {
-                    const respuesta = await fetch('/api/suscripciones', {
+                    const baseApi = window.MegaPapasConfig.apiBaseUrl.replace(/\/$/, '');
+                    if (!baseApi && window.location.hostname.endsWith('github.io')) {
+                        throw new Error('El servicio de correos todavía no está conectado.');
+                    }
+                    const respuesta = await fetch(`${baseApi}/api/suscripciones`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -432,6 +440,8 @@
                     mensajeContacto.classList.add('error');
                     console.error('Error al registrar el correo para promociones:', error);
                     return;
+                } finally {
+                    botonContacto.disabled = false;
                 }
             } else {
                 mensajeContacto.textContent = `¡Gracias, ${nombre}! Hemos recibido tu mensaje y te responderemos pronto.`;

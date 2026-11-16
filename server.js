@@ -5,6 +5,11 @@ const path = require('node:path');
 const publicDirectory = __dirname;
 const port = Number(process.env.PORT) || 3000;
 const maxBodyBytes = 8 * 1024;
+const allowedOrigins = new Set([
+    process.env.FRONTEND_ORIGIN,
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+].filter(Boolean));
 const contentTypes = {
     '.css': 'text/css; charset=utf-8',
     '.html': 'text/html; charset=utf-8',
@@ -16,6 +21,24 @@ const contentTypes = {
 function responder(respuesta, estado, contenido) {
     respuesta.writeHead(estado, { 'Content-Type': 'application/json; charset=utf-8' });
     respuesta.end(JSON.stringify(contenido));
+}
+
+function configurarCors(solicitud, respuesta) {
+    const origen = solicitud.headers.origin;
+    if (!origen) {
+        return true;
+    }
+    if (!allowedOrigins.has(origen)) {
+        responder(respuesta, 403, { error: 'Origen no autorizado.' });
+        return false;
+    }
+
+    respuesta.setHeader('Access-Control-Allow-Origin', origen);
+    respuesta.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    respuesta.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    respuesta.setHeader('Access-Control-Max-Age', '86400');
+    respuesta.setHeader('Vary', 'Origin');
+    return true;
 }
 
 async function leerJson(solicitud) {
@@ -149,7 +172,17 @@ async function servirArchivo(solicitud, respuesta, rutaUrl) {
 const servidor = http.createServer(async (solicitud, respuesta) => {
     try {
         const rutaUrl = new URL(solicitud.url, 'http://localhost').pathname;
+        if (rutaUrl === '/api/suscripciones' && solicitud.method === 'OPTIONS') {
+            if (!configurarCors(solicitud, respuesta)) {
+                return;
+            }
+            respuesta.writeHead(204).end();
+            return;
+        }
         if (rutaUrl === '/api/suscripciones' && solicitud.method === 'POST') {
+            if (!configurarCors(solicitud, respuesta)) {
+                return;
+            }
             await registrarSuscripcion(solicitud, respuesta);
             return;
         }
@@ -172,6 +205,6 @@ const servidor = http.createServer(async (solicitud, respuesta) => {
     }
 });
 
-servidor.listen(port, () => {
+servidor.listen(port, '0.0.0.0', () => {
     console.log(`MegaPapas disponible en http://localhost:${port}`);
 });
