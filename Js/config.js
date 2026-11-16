@@ -1,3 +1,3 @@
 window.MegaPapasConfig = {
-    apiBaseUrl: ''
+    apiBaseUrl: 'https://megapapas.onrender.com'
 };
