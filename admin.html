@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaPapas - Administración</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body data-vista="administrador">
+    <header class="header" id="inicio">
+        <img class="bg" src="img/bg.png" alt="">
+        <div class="menu container">
+            <a href="index.html" class="logo">MegaPapas</a>
+            <input type="checkbox" id="menu">
+            <label for="menu">
+                <img class="menu-icono" src="img/menu.png" alt="Abrir menú">
+            </label>
+            <nav class="navbar" aria-label="Navegación principal">
+                <ul>
+                    <li><a href="index.html">Vista de clientes</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#tabla-resumen">Inventario</a></li>
+                    <li><a href="#lista-clientes">Clientes registrados</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header-content container">
+            <div class="header-txt">
+                <h1><span>Administración</span> MegaPapas</h1>
+                <p>Bienvenido al panel de administración, recuerda que en este panel podras gestionar el catalogo de los
+                    productos y ver los registros y pedidos de los clientes.</p>
+                <a href="#productos" class="btn-1">Administrar productos</a>
+            </div>
+            <div class="header-img">
+                <img src="img/pl-1.png" alt="Plato de salchipapas">
+            </div>
+        </div>
+    </header>
+
+    <main class="products container" id="productos">
+        <aside class="filtros-productos" aria-label="Filtros y resumen de productos">
+            <h2>Filtrar por categoría</h2>
+            <div id="filtros-categoria" class="lista-filtros" aria-label="Categorías de productos"></div>
+            <p id="cantidad-resultados" class="cantidad-resultados" aria-live="polite"></p>
+            <h2>Resumen</h2>
+            <dl class="resumen-productos">
+                <div>
+                    <dt>Productos registrados</dt>
+                    <dd id="total-productos">0</dd>
+                </div>
+                <div>
+                    <dt>Categorías</dt>
+                    <dd id="total-categorias">0</dd>
+                </div>
+                <div>
+                    <dt>Precio promedio</dt>
+                    <dd id="precio-promedio">$0</dd>
+                </div>
+                <div>
+                    <dt>Productos agotados</dt>
+                    <dd id="total-agotados">0</dd>
+                </div>
+                <div>
+                    <dt>Valor del inventario</dt>
+                    <dd id="valor-inventario">$0</dd>
+                </div>
+            </dl>
+        </aside>
+        <h2>Productos</h2>
+        <div class="busqueda-productos">
+            <label for="buscador-productos">Buscar productos:</label>
+            <input type="search" id="buscador-productos" placeholder="Escribe el nombre de un producto">
+            <p id="mensaje-busqueda" aria-live="polite"></p>
+        </div>
+        <div class="box-container" id="lista-1" aria-live="polite"></div>
+
+        <form id="form-producto" class="formulario-pedido formulario-producto">
+            <fieldset>
+                <legend>Agregar producto</legend>
+                <input type="hidden" id="producto-id-edicion">
+                <label for="nombre-producto">Nombre:</label>
+                <input type="text" id="nombre-producto" name="nombre" required>
+
+                <label for="categoria-producto">Categoría:</label>
+                <select id="categoria-producto" name="categoria" required>
+                    <option value="">-- Selecciona una categoría --</option>
+                    <option value="Hamburguesas">Hamburguesas</option>
+                    <option value="Salchipapas">Salchipapas</option>
+                </select>
+
+                <label for="precio-producto">Precio:</label>
+                <input type="number" id="precio-producto" name="precio" min="1" step="1" required>
+
+                <label for="cantidad-producto">Cantidad disponible:</label>
+                <input type="number" id="cantidad-producto" name="cantidad" min="0" step="1" required>
+
+                <label for="descripcion-producto">Descripción:</label>
+                <textarea id="descripcion-producto" name="descripcion" rows="4" required></textarea>
+
+                <div class="selector-imagen">
+                    <label for="imagen-producto" class="btn-1">Cargar imagen</label>
+                    <input type="file" id="imagen-producto" name="imagen" accept="image/*" required
+                        aria-label="Cargar imagen">
+                </div>
+                <p id="error-producto" class="error-producto" role="alert"></p>
+                <button type="submit" class="btn-1">Agregar producto</button>
+                <button type="button" id="cancelar-edicion" class="btn-1" hidden>Cancelar edición</button>
+            </fieldset>
+        </form>
+    </main>
+
+    <section id="tabla-resumen" class="seccion-bloque container">
+        <h2>Resumen de productos</h2>
+        <div class="tabla-contenedor">
+            <table class="tabla-datos" id="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla-productos"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="lista-clientes" class="seccion-bloque container">
+        <h2>Clientes registrados</h2>
+        <div class="tabla-contenedor">
+            <table class="tabla-datos" id="tabla-clientes">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo electrónico</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Pedido</th>
+                        <th>Productos pedidos</th>
+                        <th>Total</th>
+                        <th>Medio de pago</th>
+                        <th>Instrucciones adicionales</th>
+                        <th>Fecha del pedido</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="link">
+                <h3>MegaPapas</h3>
+                <ul>
+                    <li><a href="index.html">Volver a la página de clientes</a></li>
+                </ul>
+            </div>
+            <div class="link">
+                <h3>Contacto y Ubicación:</h3>
+                <address>
+                    <p>Carrera 69 #98-95, Medellín</p>
+                    <p>Email: megapapas25@gmail.com</p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Js/modelo.js"></script>
+    <script src="Js/vista.js"></script>
+    <script src="Js/controlador.js"></script>
+</body>
+
+</html>

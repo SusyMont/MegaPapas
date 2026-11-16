@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaPapas - Catálogo de productos</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body data-vista="cliente">
+
+    <header class="header" id="inicio">
+        <img class="bg" src="img/bg.png" alt="">
+        <div class="menu container">
+            <a href="#inicio" class="logo">MegaPapas</a>
+            <input type="checkbox" id="menu">
+            <label for="menu">
+                <img class="menu-icono" src="img/menu.png" alt="Abrir menú">
+            </label>
+            <nav class="navbar" aria-label="Navegación principal">
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Registro</a></li>
+                    <li><a href="#contacto-mensaje">Contacto</a></li>
+                    <li><a href="#descarga">Descarga la app</a></li>
+                </ul>
+            </nav>
+            <div>
+                <ul>
+                    <li class="submenu">
+                        <img src="img/car.svg" id="img-carrito" alt="carrito">
+                        <div id="carrito">
+                            <div class="tabla-carrito-contenedor">
+                                <table id="lista-carrito">
+                                    <thead>
+                                        <tr>
+                                            <th>Imagen</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>Subtotal</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <p id="mensaje-carrito" role="status" aria-live="polite"></p>
+                            <p id="total-carrito" class="total-carrito" aria-live="polite">Total: $0</p>
+                            <a href="#" id="vaciar-carrito" class="btn-3">Vaciar Carrito</a>
+                            <a href="#contacto" id="realizar-pedido" class="btn-3">Realizar pedido</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="header-content container">
+            <div class="header-txt">
+                <h1><span>Bienvenido</span> disfruta de nuestros productos</h1>
+                <p>Ven y disfruta de las mejores salchipapas de Medellín, con los mejores ingredientes y la mejor
+                    atención; cada plato es pensado para que disfrutes de una experiencia única, con sabores
+                    inigualable. Antojate.
+                </p>
+                <a href="#productos" class="btn-1">Información</a>
+            </div>
+            <div class="header-img">
+                <img src="img/pl-1.png" alt="Plato de salchipapas">
+            </div>
+        </div>
+    </header>
+
+    <section class="food container">
+        <h2>Comidas rapidas</h2>
+        <p>
+            Horarios de atención: Martes a Domingo de 5:00pm a 11:30pm. <br>
+            Los días lunes activamos el modo descanso para nuestro personal. <br>
+        </p>
+    </section>
+
+    <section class="info" id="calidad">
+        <img class="bg-2" src="img/bg-2.png" alt="">
+        <div class="info-content container">
+            <div class="info-img">
+                <img src="img/fastfood.png" alt="">
+            </div>
+
+            <div class="info-txt">
+                <h2>La mejor calidad en los productos</h2>
+                <p>Disfruta de nuestros platos, preparados con productos de la mejor calidad, del campo a tu mesa
+                </p>
+                <a href="#productos" class="btn-1">Información</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="products container" id="productos">
+        <aside class="filtros-productos" aria-label="Filtros y resumen de productos">
+            <h2>Filtrar por categoría</h2>
+            <div id="filtros-categoria" class="lista-filtros" aria-label="Categorías de productos"></div>
+            <p id="cantidad-resultados" class="cantidad-resultados" aria-live="polite"></p>
+        </aside>
+        <h2>Productos</h2>
+        <div class="busqueda-productos">
+            <label for="buscador-productos">Buscar productos:</label>
+            <input type="search" id="buscador-productos" placeholder="Escribe el nombre de un producto">
+            <p id="mensaje-busqueda" aria-live="polite"></p>
+        </div>
+
+        <div class="box-container" id="lista-1" aria-live="polite"></div>
+
+    </main>
+
+    <section id="contacto" class="seccion-bloque container">
+        <h2>Formulario de Registro y Pedidos</h2>
+        <form id="form-cliente" class="formulario-pedido">
+            <fieldset>
+                <legend>Resumen del pedido</legend>
+                <ul id="resumen-pedido" class="resumen-pedido"></ul>
+                <p id="total-pedido" class="total-pedido">Total: $0</p>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos Personales</legend>
+
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Digita tu nombre" required minlength="3">
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required minlength="6"
+                    pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}">
+                <button id="buscar-cliente" type="button" class="btn-1">Buscar mis datos</button>
+                <p id="estado-cliente" role="status" aria-live="polite"></p>
+
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" placeholder="Digita tu dirección" required
+                    minlength="8">
+
+                <label for="telefono">Teléfono de Contacto:</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Digita tu teléfono" required minlength="10"
+                    maxlength="10" pattern="[0-9]{10}">
+            </fieldset>
+
+            <fieldset>
+                <legend>Detalles del Envío y Pago</legend>
+
+                <label for="pago">Método de Pago:</label>
+                <select id="pago" name="pago" required>
+                    <option value="">-- Selecciona un método --</option>
+                    <option value="efectivo">Efectivo contra entrega</option>
+                    <option value="tarjeta">Tarjeta de Crédito / Débito</option>
+                    <option value="transferencia">Transferencia Nequi / Daviplata</option>
+                </select>
+
+                <label for="instrucciones">Instrucciones adicionales de envío:</label>
+                <textarea id="instrucciones" name="instrucciones" rows="4"
+                    placeholder="Ej: Timbrar en el apartamento 302..."></textarea>
+            </fieldset>
+
+            <p id="mensaje-pedido" role="status" aria-live="polite"></p>
+            <button id="submit" type="submit" class="btn-1">Enviar Pedido</button>
+        </form>
+    </section>
+
+    <section id="contacto-mensaje" class="seccion-bloque container">
+        <h2>Conoce todas las novedades</h2>
+        <form id="form-contacto" class="formulario-pedido">
+            <fieldset>
+                <legend>Dejanos tus datos y se el primero en conocer nuestras promociones</legend>
+
+                <label for="nombre-contacto">Nombre:</label>
+                <input type="text" id="nombre-contacto" name="nombreContacto" placeholder="Tu nombre" required
+                    minlength="3" maxlength="40" pattern="[A-Za-zÁÉÍÓÚÜáéíóúüÑñ ]{3,40}"
+                    title="Solo letras y espacios, mínimo 3 caracteres">
+
+                <label for="correo-contacto">Correo electrónico:</label>
+                <input type="email" id="correo-contacto" name="correoContacto" placeholder="correo@ejemplo.com" required
+                    minlength="6">
+
+                <div class="consentimiento-promociones">
+                    <input type="checkbox" id="consentimiento-promociones-contacto" name="consentimientoPromociones">
+                    <label for="consentimiento-promociones-contacto">Acepto recibir promociones y novedades de MegaPapas por correo.</label>
+                </div>
+
+                <p id="mensaje-contacto" role="status" aria-live="polite"></p>
+                <button type="submit" class="btn-1">Enviar mensaje</button>
+            </fieldset>
+        </form>
+    </section>
+
+<section id="ubicacion" class="ubicacion container" aria-labelledby="titulo-ubicacion">
+        <h2 id="titulo-ubicacion">Nuestra ubicación</h2>
+        <p>Nos encuentras en: <strong id="direccion-negocio">Carrera 69 #98-95, Medellín</strong></p>
+
+        <form id="form-ubicacion" class="ubicacion__formulario" novalidate>
+            <div class="ubicacion__campo">
+                <label for="consulta-ubicacion">Busca tu barrio o dirección para ver qué tan lejos estás:</label>
+                <input type="search" id="consulta-ubicacion" placeholder="Ej: Laureles, Medellín" autocomplete="off">
+            </div>
+            <button type="submit" id="boton-buscar-ubicacion" class="btn-1">Buscar</button>
+            <button type="button" id="boton-ver-negocio" class="btn-3">Ver el local</button>
+        </form>
+
+        <p id="estado-ubicacion" class="ubicacion__estado" role="status" aria-live="polite"></p>
+
+        <div class="ubicacion__contenido">
+            <ul id="lista-ubicaciones" class="ubicacion__lista"></ul>
+            <div class="ubicacion__mapa-caja">
+                <iframe id="mapa-ubicacion" class="ubicacion__mapa" title="Mapa con la ubicación del negocio"
+                    loading="lazy"></iframe>
+                <a id="enlace-mapa" class="ubicacion__enlace" href="#" target="_blank" rel="noopener" hidden>Ver mapa más grande</a>
+            </div>
+        </div>
+        <p class="ubicacion__credito">Mapa y datos © colaboradores de OpenStreetMap.</p>
+    </section>
+
+    <section class="app container" id="descarga">
+        <div class="app-txt">
+            <h2>Descarga nuestra app para descubrir más.</h2>
+            <p>No te pierdas de nuestras grandes promociones, descarga la app y sé el primero en enterarte.</p>
+            <div class="descarga">
+                <img src="img/store1.png" alt="Disponible en tienda de aplicaciones">
+                <img src="img/store2.png" alt="Disponible en tienda de aplicaciones">
+            </div>
+        </div>
+
+        <div class="app-img">
+            <img src="img/app.png" alt="Aplicación MegaPapas">
+        </div>
+    </section>
+
+    <footer class="footer" id="megapapas">
+        <div class="footer-content container">
+            <div class="link">
+                <h3>Contáctanos:</h3>
+                <ul>
+                    <li><a href="https://www.instagram.com/megapapasmed?stkn=MTdjbTA1eG9waGd4MQ==">Instagram</a></li>
+                    <li><a href="https://api.whatsapp.com/message/6OTNDGGROVHJI1?autoload=1&app_absent=0">WhatsApp</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="link">
+                <h3>Contacto y Ubicación:</h3>
+                <address>
+                    <p>Carrera 69 #98-95, Medellín</p>
+                    <p>Email: megapapas25@gmail.com</p>
+                </address>
+            </div>
+
+            <div class="link">
+                <h3>Disponible en:</h3>
+                <div class="descarga">
+                    <img src="img/store1.png" alt="Disponible en tienda de aplicaciones">
+                    <img src="img/store2.png" alt="Disponible en tienda de aplicaciones">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Js/api.js"></script>
+    <script src="Js/modelo.js"></script>
+    <script src="Js/vista.js"></script>
+    <script src="Js/controlador.js"></script>
+</body>
+
+</html>
