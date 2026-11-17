@@ -74,35 +74,46 @@
         }
         return null;
     }
-// Ubicación del negocio.
-    const direccionNegocio = 'Carrera 69 #98-95, Medellín';
+const direccionNegocio = 'Carrera 69 #98-95, Medellín';
 
-    // De la dirección más específica a la más general.
+    // Consultas de la más exacta a la más general; se usa la primera que devuelva resultados.
+    // Se incluye el barrio (Castilla) porque en Medellín hay varias "Carrera 69" y, sin ese dato,
+    // la API devolvía una en San Antonio de Prado, muy lejos del local.
     const consultasNegocio = [
-        'Carrera 69 #98-95, Medellín, Colombia',
-        'Carrera 69, Medellín, Colombia',
-        'Medellín, Colombia'
+        'Carrera 69 #98-95, Castilla, Medellín, Colombia',
+        'Carrera 69, Castilla, Medellín, Colombia',
+        'Castilla, Medellín, Colombia'
     ];
 
+    // Coordenadas verificadas del local (Carrera 69 entre calles 98 y 99, barrio Castilla).
+    // La API no conoce el número exacto de la casa, así que el marcador siempre usa este punto.
+    const coordenadasNegocio = { latitud: 6.2944, longitud: -75.5717 };
+
+    // Si la API devuelve un lugar a más de esta distancia del local, se considera un resultado equivocado.
+    const distanciaMaximaKm = 1.5;
+
+    // La API pública permite máximo 1 petición por segundo.
     const pausaEntrePeticiones = 1100;
 
+    // Guarda el local encontrado y los resultados de la última búsqueda.
     const estadoUbicacion = {
         negocio: {
             id: 0,
             nombre: direccionNegocio,
-            latitud: 6.2514071,
-            longitud: -75.5871704,
+            latitud: coordenadasNegocio.latitud,
+            longitud: coordenadasNegocio.longitud,
             importancia: 0,
             distanciaKm: null
         },
         resultados: []
     };
 
+    // Espera un tiempo antes de continuar (se usa entre peticiones a la API).
     function pausar(milisegundos) {
         return new Promise((resolver) => setTimeout(resolver, milisegundos));
     }
 
-    // Distancia entre dos coordenadas, en kilómetros.
+    // Distancia en kilómetros entre dos puntos (fórmula de Haversine).
     function calcularDistanciaKm(origen, destino) {
         const radioTierraKm = 6371;
         const aRadianes = (grados) => (grados * Math.PI) / 180;
@@ -113,7 +124,7 @@
         return radioTierraKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
-    // Normaliza los resultados y calcula la distancia si hay un origen.
+    // Convierte la respuesta de la API en objetos simples; con "origen" calcula la distancia al local.
     function transformarUbicaciones(datos, origen = null) {
         return datos
             .filter((lugar) => lugar.lat && lugar.lon)
@@ -132,6 +143,7 @@
             .sort((a, b) => (origen ? a.distanciaKm - b.distanciaKm : b.importancia - a.importancia));
     }
 
+    // Arma el enlace del mapa incrustado de OpenStreetMap con un marcador en el punto.
     function crearUrlMapa(ubicacion) {
         const margen = 0.004;
         const caja = [
@@ -143,6 +155,7 @@
         return `https://www.openstreetmap.org/export/embed.html?bbox=${caja}&layer=mapnik&marker=${ubicacion.latitud},${ubicacion.longitud}`;
     }
 
+    // Enlace para abrir el mismo punto en la página de OpenStreetMap.
     function crearUrlMapaGrande(ubicacion) {
         return `https://www.openstreetmap.org/?mlat=${ubicacion.latitud}&mlon=${ubicacion.longitud}#map=17/${ubicacion.latitud}/${ubicacion.longitud}`;
     }
@@ -254,4 +267,5 @@
             crearUrlMapaGrande
         }
     };
-})(window.MegaPapas = window.MegaPapas || {});
+}(window.MegaPapas = window.MegaPapas || {}) )
+
