@@ -60,7 +60,7 @@ En palabras simples: la página manda el correo a su propio servidor, y el servi
 
 ### Datos de la API
 
-- **URL base:** la del servidor propio, configurada en `Js/config.js` (por ejemplo `https://megapapas.onrender.com`).
+- **URL base:** la del servidor propio, configurada en `Js/config.js` siendo esta url: `https://megapapas.onrender.com`.
 - **Endpoint:** `/api/suscripciones`
 - **Método HTTP:** `POST`
 - **Encabezado:** `Content-Type: application/json`
