@@ -114,6 +114,29 @@
 
     <section id="tabla-resumen" class="seccion-bloque container">
         <h2>Resumen de productos</h2>
+        <div class="controles-tabla">
+            <div>
+                <label for="filtro-tabla-productos">Buscar producto:</label>
+                <input type="search" id="filtro-tabla-productos" placeholder="Nombre o categoría">
+            </div>
+            <div>
+                <label for="categoria-tabla-productos">Categoría:</label>
+                <select id="categoria-tabla-productos">
+                    <option value="">Todas</option>
+                    <option value="Hamburguesas">Hamburguesas</option>
+                    <option value="Salchipapas">Salchipapas</option>
+                </select>
+            </div>
+            <div>
+                <label for="estado-tabla-productos">Estado:</label>
+                <select id="estado-tabla-productos">
+                    <option value="">Todos</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="agotado">Agotado</option>
+                </select>
+            </div>
+            <button type="button" id="exportar-productos" class="btn-3">Exportar CSV</button>
+        </div>
         <div class="tabla-contenedor">
             <table class="tabla-datos" id="tabla-productos">
                 <thead>
@@ -128,10 +151,31 @@
                 <tbody id="cuerpo-tabla-productos"></tbody>
             </table>
         </div>
+        <nav class="paginacion-tabla" id="paginacion-productos" aria-label="Paginación de productos">
+            <button type="button" data-page-prev>Anterior</button>
+            <span data-page-info aria-live="polite"></span>
+            <button type="button" data-page-next>Siguiente</button>
+        </nav>
     </section>
 
     <section id="lista-clientes" class="seccion-bloque container">
         <h2>Clientes registrados</h2>
+        <div class="controles-tabla">
+            <div>
+                <label for="filtro-tabla-clientes">Buscar cliente o pedido:</label>
+                <input type="search" id="filtro-tabla-clientes" placeholder="Nombre, correo o producto">
+            </div>
+            <div>
+                <label for="estado-tabla-clientes">Estado del pedido:</label>
+                <select id="estado-tabla-clientes">
+                    <option value="">Todos</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="entregado">Entregado</option>
+                    <option value="sin-pedido">Sin pedidos</option>
+                </select>
+            </div>
+            <button type="button" id="exportar-clientes" class="btn-3">Exportar CSV</button>
+        </div>
         <div class="tabla-contenedor">
             <table class="tabla-datos" id="tabla-clientes">
                 <thead>
@@ -152,6 +196,11 @@
                 <tbody id="cuerpo-tabla"></tbody>
             </table>
         </div>
+        <nav class="paginacion-tabla" id="paginacion-clientes" aria-label="Paginación de clientes">
+            <button type="button" data-page-prev>Anterior</button>
+            <span data-page-info aria-live="polite"></span>
+            <button type="button" data-page-next>Siguiente</button>
+        </nav>
     </section>
 
     <footer class="footer">

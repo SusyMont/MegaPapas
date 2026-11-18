@@ -1,4 +1,93 @@
 (function (app) {
+    function configurarTablaPaginada(opciones) {
+        const filasPorPagina = 5;
+        const botonAnterior = opciones.paginacion.querySelector('[data-page-prev]');
+        const botonSiguiente = opciones.paginacion.querySelector('[data-page-next]');
+        const textoPagina = opciones.paginacion.querySelector('[data-page-info]');
+        let paginaActual = 1;
+
+        function obtenerFilasFiltradas() {
+            const busqueda = app.Vista.normalizarTexto(opciones.busqueda.value);
+            return [...opciones.cuerpo.querySelectorAll('tr')].filter((fila) => {
+                const textoFila = [...fila.cells]
+                    .map((celda) => celda.dataset.csvValue || celda.textContent)
+                    .join(' ');
+                if (busqueda && !app.Vista.normalizarTexto(textoFila).includes(busqueda)) {
+                    return false;
+                }
+                return opciones.filtros.every((filtro) => {
+                    const valor = filtro.control.value;
+                    return !valor || fila.dataset[filtro.atributo] === valor;
+                });
+            });
+        }
+
+        function actualizar(reiniciarPagina = false) {
+            const todasLasFilas = [...opciones.cuerpo.querySelectorAll('tr')];
+            const filasFiltradas = obtenerFilasFiltradas();
+            const paginasTotales = Math.max(1, Math.ceil(filasFiltradas.length / filasPorPagina));
+            if (reiniciarPagina) paginaActual = 1;
+            paginaActual = Math.min(paginaActual, paginasTotales);
+
+            const inicio = (paginaActual - 1) * filasPorPagina;
+            const filasPagina = new Set(filasFiltradas.slice(inicio, inicio + filasPorPagina));
+            todasLasFilas.forEach((fila) => {
+                fila.hidden = !filasPagina.has(fila);
+            });
+
+            textoPagina.textContent = filasFiltradas.length === 0
+                ? 'Sin registros para mostrar'
+                : `Mostrando ${inicio + 1}–${Math.min(inicio + filasPorPagina, filasFiltradas.length)} de ${filasFiltradas.length}`;
+            botonAnterior.disabled = paginaActual === 1;
+            botonSiguiente.disabled = paginaActual === paginasTotales;
+        }
+
+        function exportarCsv() {
+            const encabezados = [...opciones.tabla.querySelectorAll('thead th')]
+                .map((celda) => celda.textContent.trim());
+            const filas = obtenerFilasFiltradas().map((fila) => [...fila.cells].map((celda) => {
+                if (celda.dataset.csvValue) return celda.dataset.csvValue;
+                const elementosLista = [...celda.querySelectorAll('li')];
+                return elementosLista.length > 0
+                    ? elementosLista.map((elemento) => elemento.textContent.trim()).join('; ')
+                    : celda.textContent.trim().replace(/\s+/g, ' ');
+            }));
+            const escapar = (valor) => {
+                const texto = String(valor);
+                const seguro = /^\s*[=+\-@]/.test(texto) ? `'${texto}` : texto;
+                return `"${seguro.replace(/"/g, '""')}"`;
+            };
+            const contenido = [encabezados, ...filas]
+                .map((fila) => fila.map(escapar).join(','))
+                .join('\r\n');
+            const archivo = new Blob([`\uFEFF${contenido}`], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(archivo);
+            const enlace = document.createElement('a');
+            enlace.href = url;
+            enlace.download = opciones.nombreArchivo;
+            document.body.appendChild(enlace);
+            enlace.click();
+            enlace.remove();
+            window.setTimeout(() => URL.revokeObjectURL(url), 0);
+        }
+
+        opciones.busqueda.addEventListener('input', () => actualizar(true));
+        opciones.filtros.forEach((filtro) => {
+            filtro.control.addEventListener('change', () => actualizar(true));
+        });
+        botonAnterior.addEventListener('click', () => {
+            paginaActual -= 1;
+            actualizar();
+        });
+        botonSiguiente.addEventListener('click', () => {
+            paginaActual += 1;
+            actualizar();
+        });
+        opciones.botonExportar.addEventListener('click', exportarCsv);
+
+        return { actualizar };
+    }
+
     function configurarValidacionEnEspanol(formulario) {
         formulario.querySelectorAll('input, select, textarea').forEach((campo) => {
             campo.addEventListener('invalid', () => {
@@ -42,6 +131,18 @@
         const totalResumen = document.getElementById('total-pedido');
         const mensajePedido = document.getElementById('mensaje-pedido');
         const botonPedido = document.getElementById('realizar-pedido');
+        const tablaProductos = esAdmin ? configurarTablaPaginada({
+            tabla: document.getElementById('tabla-productos'),
+            cuerpo: document.getElementById('cuerpo-tabla-productos'),
+            busqueda: document.getElementById('filtro-tabla-productos'),
+            filtros: [
+                { control: document.getElementById('categoria-tabla-productos'), atributo: 'categoria' },
+                { control: document.getElementById('estado-tabla-productos'), atributo: 'estadoInventario' }
+            ],
+            paginacion: document.getElementById('paginacion-productos'),
+            botonExportar: document.getElementById('exportar-productos'),
+            nombreArchivo: 'megapapas-productos.csv'
+        }) : null;
 
         const actualizarCatalogo = () => {
             const busqueda = app.Vista.normalizarTexto(campoBusqueda.value);
@@ -56,6 +157,7 @@
 
             if (esAdmin) {
                 app.Vista.dibujarTablaProductos(document.getElementById('cuerpo-tabla-productos'), productos);
+                tablaProductos.actualizar();
                 app.Vista.actualizarResumen({
                     totalProductos: document.getElementById('total-productos'),
                     totalCategorias: document.getElementById('total-categorias'),
@@ -564,13 +666,25 @@
             iniciarUbicacion();
         }
         if (esAdmin) {
+            const cuerpoTablaClientes = document.getElementById('cuerpo-tabla');
+            const tablaClientes = configurarTablaPaginada({
+                tabla: document.getElementById('tabla-clientes'),
+                cuerpo: cuerpoTablaClientes,
+                busqueda: document.getElementById('filtro-tabla-clientes'),
+                filtros: [
+                    { control: document.getElementById('estado-tabla-clientes'), atributo: 'estadoPedido' }
+                ],
+                paginacion: document.getElementById('paginacion-clientes'),
+                botonExportar: document.getElementById('exportar-clientes'),
+                nombreArchivo: 'megapapas-clientes-pedidos.csv'
+            });
             const actualizarTablaClientes = () => {
                 app.Vista.dibujarTablaClientes(
-                    document.getElementById('cuerpo-tabla'),
+                    cuerpoTablaClientes,
                     app.Modelo.obtenerClientes()
                 );
+                tablaClientes.actualizar();
             };
-            const cuerpoTablaClientes = document.getElementById('cuerpo-tabla');
             cuerpoTablaClientes.addEventListener('click', (evento) => {
                 const boton = evento.target.closest('button[data-pedido-accion]');
                 if (!boton) return;

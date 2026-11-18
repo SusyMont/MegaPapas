@@ -510,6 +510,52 @@ p {
     overflow-x: auto;
 }
 
+.controles-tabla {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.controles-tabla > div {
+    display: grid;
+    gap: 6px;
+}
+
+.controles-tabla input,
+.controles-tabla select {
+    min-height: 42px;
+    padding: 8px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.paginacion-tabla {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.paginacion-tabla button {
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: #ff9000;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.paginacion-tabla button:disabled {
+    background: #999999;
+    cursor: not-allowed;
+}
+
 .tabla-datos {
     width: 100%;
     border-collapse: collapse;

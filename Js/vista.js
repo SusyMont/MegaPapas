@@ -121,6 +121,8 @@
         cuerpo.replaceChildren();
         productos.forEach((producto) => {
             const fila = document.createElement('tr');
+            fila.dataset.categoria = producto.categoria;
+            fila.dataset.estadoInventario = producto.cantidad <= 0 ? 'agotado' : 'disponible';
             const valores = [
                 producto.nombre,
                 producto.categoria,
@@ -159,6 +161,9 @@
             const pedidosParaMostrar = pedidos.length > 0 ? pedidos : [null];
             pedidosParaMostrar.forEach((pedido, indice) => {
                 const fila = document.createElement('tr');
+                fila.dataset.estadoPedido = !pedido
+                    ? 'sin-pedido'
+                    : (pedido.estado === 'entregado' ? 'entregado' : 'pendiente');
                 const celdaProductos = document.createElement('td');
                 if (!pedido || !pedido.detallePedido?.length) {
                     celdaProductos.textContent = pedido ? 'Sin detalle' : 'Sin pedidos';
@@ -176,6 +181,7 @@
                 if (pedido) {
                     if (pedido.estado === 'entregado') {
                         celdaEstado.textContent = 'Entregado';
+                        celdaEstado.dataset.csvValue = 'Entregado';
                     } else {
                         const botonEstado = document.createElement('button');
                         botonEstado.type = 'button';
@@ -185,9 +191,11 @@
                         botonEstado.dataset.pedidoId = pedido.id;
                         botonEstado.textContent = 'Marcar como entregado';
                         celdaEstado.appendChild(botonEstado);
+                        celdaEstado.dataset.csvValue = 'Pendiente';
                     }
                 } else {
                     celdaEstado.textContent = '—';
+                    celdaEstado.dataset.csvValue = 'Sin pedidos';
                 }
 
                 fila.append(
