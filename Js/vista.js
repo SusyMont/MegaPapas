@@ -324,7 +324,6 @@
         document.getElementById('error-producto').textContent = '';
         formulario.querySelectorAll('.campo-error').forEach((campo) => campo.classList.remove('campo-error'));
     }
-// Renderizado del mapa.
 
     function mostrarEstadoUbicacion(texto, cargando = false) {
         const estado = document.getElementById('estado-ubicacion');
