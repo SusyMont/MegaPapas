@@ -103,6 +103,8 @@ El catálogo de productos y los datos de los clientes se guardan en el **navegad
 
 ## Publicación
 
-La página se publica en GitHub Pages desde la rama `main`. El registro de correos para promociones funciona con un pequeño servidor aparte (Node.js, `server.js`), que se despliega por separado; su dirección se configura en `Js/config.js`.
+La página se publica en GitHub Pages desde la rama `main`. El registro de correos para promociones funciona con un servidor aparte, llamado Render (que activa el 'server.js'), el cual se despliega por separado; su dirección se configura en 'Js/config.js'.
+
+**URL base:** https://render.com/
 
 Por seguridad, el archivo `.env` con las claves privadas nunca se sube al repositorio.
