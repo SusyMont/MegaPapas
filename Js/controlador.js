@@ -453,7 +453,6 @@
         configurarValidacionEnEspanol(formularioContacto);
     }
 
-    // Eventos del mapa.
     function iniciarUbicacion() {
         const formulario = document.getElementById('form-ubicacion');
         if (!formulario) {
@@ -476,21 +475,22 @@
             try {
                 for (let indice = 0; indice < modelo.consultasNegocio.length; indice += 1) {
                     const datos = await app.Servicios.consultarUbicaciones(modelo.consultasNegocio[indice], 1);
-                    const lugares = modelo.transformarUbicaciones(datos);
+                    const lugares = modelo.transformarUbicaciones(datos, modelo.coordenadasNegocio);
 
-                    if (lugares.length > 0) {
-                        modelo.estado.negocio = lugares[0];
-                        mostrarLugar(lugares[0]);
-                        app.Vista.mostrarEstadoUbicacion(indice === 0
-                            ? 'Así llegas a nuestro local.'
-                            : 'No encontramos el número exacto; el mapa muestra la zona del local.');
+                    if (lugares.length > 0 && lugares[0].distanciaKm <= modelo.distanciaMaximaKm) {
+                        modelo.estado.negocio = {
+                            ...modelo.estado.negocio,
+                            nombre: `${modelo.direccionNegocio} (${lugares[0].nombre})`
+                        };
+                        mostrarLugar(modelo.estado.negocio);
+                        app.Vista.mostrarEstadoUbicacion('Así llegas a nuestro local.');
                         return;
                     }
 
                     await modelo.pausar(modelo.pausaEntrePeticiones);
                 }
 
-                app.Vista.mostrarEstadoUbicacion(`No pudimos ubicar la dirección en el mapa. Nos encuentras en ${modelo.direccionNegocio}.`);
+                app.Vista.mostrarEstadoUbicacion(`Así llegas a nuestro local: ${modelo.direccionNegocio}.`);
             } catch (error) {
                 app.Vista.mostrarEstadoUbicacion(`No pudimos cargar el mapa en este momento. Revisa tu conexión e inténtalo de nuevo. Nos encuentras en ${modelo.direccionNegocio}.`);
             }

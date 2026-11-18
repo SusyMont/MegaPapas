@@ -1,8 +1,6 @@
-// Búsqueda de lugares con Nominatim.
 (function (app) {
     const urlBaseNominatim = 'https://nominatim.openstreetmap.org/search';
 
-    // Evita repetir búsquedas.
     const cacheConsultas = new Map();
 
     async function consultarUbicaciones(consulta, limite = 5) {
